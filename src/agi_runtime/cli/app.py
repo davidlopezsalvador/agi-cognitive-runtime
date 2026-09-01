@@ -404,5 +404,66 @@ def transfer_demo() -> None:
         typer.echo(f"Confidence: {r.confidence:.2f}")
 
 
+@app.command()
+def logs(
+    task_id: str = typer.Argument(None),
+    last: int = typer.Option(5, "--last", "-n"),
+    json_output: bool = typer.Option(False, "--json", "-j"),
+) -> None:
+    """View cognitive execution logs."""
+    import os
+    import glob as glob_mod
+
+    log_dir = os.path.join(os.path.dirname(__file__), '..', 'logs')
+    log_dir = os.path.normpath(log_dir)
+
+    if not os.path.exists(log_dir):
+        typer.echo("No logs found. Run a task first: agi run 'your task'")
+        raise typer.Exit(1)
+
+    if task_id:
+        json_file = os.path.join(log_dir, f'cognitive_{task_id}.json')
+        if not os.path.exists(json_file):
+            typer.echo(f"Log not found: {task_id}")
+            raise typer.Exit(1)
+
+        with open(json_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        if json_output:
+            typer.echo(json.dumps(data, indent=2, ensure_ascii=False))
+        else:
+            typer.echo(f"=== Log: {task_id} ===")
+            typer.echo(f"Steps: {data['total_steps']}")
+            typer.echo(f"\nMetrics:")
+            for k, v in data['metrics'].items():
+                typer.echo(f"  {k}: {v}")
+            typer.echo(f"\nExecution Trace:")
+            for step in data['steps']:
+                typer.echo(f"  [{step['step']:3d}] {step['type']}: {step['description'][:70]}")
+    else:
+        log_files = sorted(glob_mod.glob(os.path.join(log_dir, 'cognitive_*.json')), reverse=True)[:last]
+
+        if not log_files:
+            typer.echo("No logs found.")
+            raise typer.Exit(1)
+
+        typer.echo(f"=== Last {len(log_files)} Cognitive Logs ===\n")
+        for lf in log_files:
+            with open(lf, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            task_id = data['task_id']
+            steps = data['total_steps']
+            m = data['metrics']
+
+            typer.echo(f"  {task_id}")
+            typer.echo(f"    Steps: {steps} | Hypotheses: {m['hypotheses_generated']} | "
+                      f"Memory: {m['memory_queries']} | Knowledge: {m['knowledge_applied']}")
+            typer.echo(f"    Tools: {m['tool_calls']} | Verified: {m['verification_checks']} | "
+                      f"Lessons: {m['lessons_learned']} | Duration: {m['duration_ms']:.1f}ms")
+            typer.echo()
+
+
 if __name__ == "__main__":
     app()

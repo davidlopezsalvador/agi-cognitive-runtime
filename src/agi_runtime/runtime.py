@@ -33,6 +33,7 @@ from agi_runtime.action.tools import BuiltinTools, ToolResult
 from agi_runtime.action.loop import ToolUseLoop
 from agi_runtime.orchestration.agents import AgentOrchestrator, AgentRole
 from agi_runtime.memory.retriever import EpisodicRetriever, RetrievedEpisode
+from agi_runtime.logging import CognitiveLogger
 
 
 class CognitiveTrace(BaseModel):
@@ -89,12 +90,14 @@ class CognitiveRuntime:
         memory: Memory | None = None,
         world_model: WorldModel | None = None,
         budget: CognitiveBudget | None = None,
+        enable_logging: bool = True,
     ) -> None:
         self.provider = model_provider
         self.knowledge = knowledge or KnowledgeStore()
         self.memory = memory or Memory()
         self.world_model = world_model or WorldModel()
         self.budget = budget or CognitiveBudget()
+        self.enable_logging = enable_logging
 
         self.goals = GoalTree()
         self.hypotheses = HypothesisSpace()
@@ -109,6 +112,7 @@ class CognitiveRuntime:
         self.orchestrator = AgentOrchestrator()
         self.adaptive_planner = AdaptivePlanner()
         self.episodic_retriever = EpisodicRetriever(self.memory)
+        self.cog_log: CognitiveLogger | None = None
 
         self._step_count = 0
         self._tool_calls = 0
@@ -211,8 +215,19 @@ class CognitiveRuntime:
         self._tool_calls = 0
         self.trace = CognitiveTrace(task=task_description)
 
+        if self.enable_logging:
+            self.cog_log = CognitiveLogger()
+            self.cog_log.log_step('TASK_RECEIVED', task_description)
+
         classification = self.classify(task_description)
         self.trace.cognitive_mode = classification.depth.value
+
+        if self.cog_log:
+            self.cog_log.log_classification(
+                classification.depth.value,
+                classification.complexity,
+                classification.reasoning.split(', ')[:5]
+            )
 
         task = Task(
             objective=task_description,
@@ -228,12 +243,30 @@ class CognitiveRuntime:
         plan = self.plan_task(task)
         self.trace.decisions.append(f"Selected policy: {classification.depth.value}")
 
+        if self.cog_log:
+            self.cog_log.log_plan([s.action for s in plan.steps])
+
         retrieved = self.episodic_retriever.retrieve(task_description, limit=3)
         if retrieved:
             self.trace.observations.append(f"Found {len(retrieved)} relevant past experiences")
+            if self.cog_log:
+                self.cog_log.log_memory_search(
+                    task_description,
+                    len(retrieved),
+                    retrieved[0].relevance_score if retrieved else 0
+                )
+        elif self.cog_log:
+            self.cog_log.log_memory_search(task_description, 0, 0)
 
         if classification.requires_hypotheses:
-            self.generate_hypotheses([task_description])
+            hypotheses = self.generate_hypotheses([task_description])
+            if self.cog_log:
+                for h in hypotheses:
+                    self.cog_log.log_hypothesis(h.statement, h.posterior_confidence)
+
+        knowledge_results = self.knowledge.search(task_description)
+        if knowledge_results and self.cog_log:
+            self.cog_log.log_knowledge_applied(knowledge_results, 'search')
 
         ctx = self.context_compiler.compile(
             task_description,
@@ -261,6 +294,9 @@ class CognitiveRuntime:
             )
             self._tool_calls = len(tool_calls)
             self.trace.actions.extend([f"Tool: {tc.tool_name}" for tc in tool_calls])
+            if self.cog_log:
+                for tc in tool_calls:
+                    self.cog_log.log_tool_call(tc.tool_name, tc.arguments, tc.result[:100])
         elif self.provider:
             prompt = ctx.to_prompt()
             prompt += f"\n\nTask: {task_description}\n\nProvide a structured response with: objective, approach, result."
@@ -269,10 +305,18 @@ class CognitiveRuntime:
             answer = f"Cognitive runtime processed: {task_description} (depth={classification.depth.value})"
 
         if classification.requires_verification:
-            self.verify(answer)
+            verification_result = self.verify(answer)
+            if self.cog_log:
+                self.cog_log.log_verification(
+                    'Answer verified',
+                    verification_result[:100],
+                    'PASS' in verification_result or len(verification_result) == 0
+                )
 
         lesson = f"Completed task with depth {classification.depth.value}"
         self.trace.lessons.append(lesson)
+        if self.cog_log:
+            self.cog_log.log_lesson(lesson)
 
         self.memory.store_episode(Episode(
             task=task_description,
@@ -284,6 +328,13 @@ class CognitiveRuntime:
 
         self.goals.complete_goal(goal.id)
         elapsed = time.time() - start
+
+        if self.cog_log:
+            self.cog_log.log_metacognition(
+                self.metacognition.current_confidence,
+                self.metacognition.__dict__
+            )
+            self.cog_log.summary(elapsed * 1000)
 
         return RuntimeResult(
             success=True,
