@@ -107,19 +107,16 @@ class Memory(BaseModel):
         self.failures.append(record)
 
     def find_similar_episodes(self, task: str, limit: int = 5) -> list[Episode]:
-        task_lower = task.lower()
-        scored = []
-        for ep in self.episodes:
-            score = 0
-            if task_lower in ep.task.lower():
-                score += 3
-            if task_lower in ep.context.lower():
-                score += 1
-            if ep.lesson:
-                score += 1
-            scored.append((score, ep))
-        scored.sort(key=lambda x: x[0], reverse=True)
-        return [ep for _, ep in scored[:limit]]
+        """Delegates to EpisodicRetriever. This used to be a second,
+        independently-tuned scoring implementation living alongside
+        agi_runtime.memory.retriever.EpisodicRetriever — same job, different
+        weights, silently diverging. Keeping ONE scorer as the source of
+        truth. Local import avoids a circular import (retriever.py imports
+        Memory from this module)."""
+        from agi_runtime.memory.retriever import EpisodicRetriever
+
+        retriever = EpisodicRetriever(self)
+        return [r.episode for r in retriever.retrieve(task, limit=limit)]
 
     def find_relevant_skills(self, task: str) -> list[ProceduralSkill]:
         task_lower = task.lower()

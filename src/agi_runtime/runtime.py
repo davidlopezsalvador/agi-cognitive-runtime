@@ -23,7 +23,7 @@ from agi_runtime.reasoning.hypothesis import Hypothesis, HypothesisSpace
 from agi_runtime.memory.models import Memory, Episode
 from agi_runtime.knowledge.store import KnowledgeStore
 from agi_runtime.metacognition.state import MetacognitiveState
-from agi_runtime.verification.engine import VerificationEngine
+from agi_runtime.verification.engine import VerificationEngine, VerificationResult
 from agi_runtime.transfer.engine import TransferEngine
 from agi_runtime.context.compiler import ContextCompiler, CognitiveContext
 from agi_runtime.compiler.policy import PolicyCompiler, CognitivePolicy
@@ -102,18 +102,27 @@ class CognitiveRuntime:
         self.goals = GoalTree()
         self.hypotheses = HypothesisSpace()
         self.metacognition = MetacognitiveState()
-        self.verification = VerificationEngine()
+        self.verification = VerificationEngine(provider=model_provider)
         self.transfer = TransferEngine()
         self.context_compiler = ContextCompiler(self.knowledge, self.memory, self.world_model)
         self.policy_compiler = PolicyCompiler()
         self.trace = CognitiveTrace()
         self.tools = BuiltinTools()
-        self.tool_loop = ToolUseLoop(self.tools, model_provider)
+        self.tool_loop = ToolUseLoop(
+            self.tools, model_provider, max_iterations=self.budget.max_tool_calls
+        )
         self.orchestrator = AgentOrchestrator()
         self.adaptive_planner = AdaptivePlanner()
         self.episodic_retriever = EpisodicRetriever(self.memory)
         self.cog_log: CognitiveLogger | None = None
 
+        # NOT wired into run() yet: self.transfer, self.orchestrator and
+        # self.adaptive_planner are constructed but no code path in run()
+        # calls them. Wiring them for real needs product decisions (when a
+        # task warrants multi-agent orchestration vs. a single pass; what
+        # counts as a ReplanTrigger) rather than a cosmetic call just to make
+        # the diagram true. See AUDIT.md.
+        self._last_verification: VerificationResult | None = None
         self._step_count = 0
         self._tool_calls = 0
 
@@ -139,20 +148,30 @@ class CognitiveRuntime:
 
         total_signal = uncertainty + planning + experiment + adapt + long_horizon
 
+        # Depth is chosen by which signal is STRONGEST, not by a fixed
+        # precedence order. The previous version picked L5_ADAPT whenever
+        # adapt > 0, even if planning had 5x the matches — one incidental
+        # "retry" would outrank a task overwhelmingly about building
+        # something. Ties fall back to severity order (long-horizon >
+        # adapt > experiment > investigate > plan), same order as before.
+        #
+        # Known limitation kept as-is in this pass: because total_signal
+        # is the sum of these same five counters, total_signal > 0 always
+        # implies at least one counter > 0, so L1_REASON can never be
+        # selected here — it would need its own "reasoning_words" signal
+        # to become reachable. Flagging rather than guessing that list.
         if total_signal == 0:
             depth = CognitiveDepth.L0_DIRECT
-        elif long_horizon > 0:
-            depth = CognitiveDepth.L6_LONG_HORIZON
-        elif adapt > 0:
-            depth = CognitiveDepth.L5_ADAPT
-        elif experiment > 0:
-            depth = CognitiveDepth.L4_EXPERIMENT
-        elif uncertainty > planning:
-            depth = CognitiveDepth.L3_INVESTIGATE
-        elif planning > 0:
-            depth = CognitiveDepth.L2_PLAN
         else:
-            depth = CognitiveDepth.L1_REASON
+            scored_depths = [
+                (long_horizon, CognitiveDepth.L6_LONG_HORIZON),
+                (adapt, CognitiveDepth.L5_ADAPT),
+                (experiment, CognitiveDepth.L4_EXPERIMENT),
+                (uncertainty, CognitiveDepth.L3_INVESTIGATE),
+                (planning, CognitiveDepth.L2_PLAN),
+            ]
+            best_score = max(score for score, _ in scored_depths)
+            depth = next(d for score, d in scored_depths if score == best_score)
 
         complexity = min(total_signal / 5.0, 1.0)
 
@@ -192,14 +211,31 @@ class CognitiveRuntime:
         return plan
 
     def generate_hypotheses(self, observations: list[str], count: int = 3) -> list[Hypothesis]:
+        """Without a provider this falls back to templating the observation
+        into a statement (f"Hypothesis from: {obs}") — not real hypothesis
+        generation, just a placeholder so the rest of the pipeline has
+        something to rank. With a provider, each observation is actually
+        sent to the model to produce a specific, falsifiable hypothesis."""
         for obs in observations[:count]:
-            h = Hypothesis(statement=f"Hypothesis from: {obs}")
-            self.hypotheses.add(h)
+            statement = f"Hypothesis from: {obs}"
+            if self.provider:
+                response = self.provider.generate(
+                    f"Observation: {obs}\n\n"
+                    "Propose one specific, falsifiable hypothesis that could explain or "
+                    "address this. Respond with only the hypothesis statement, no preamble.",
+                    system="You are a rigorous hypothesis-generation module. Prefer specific, "
+                    "testable hypotheses over vague ones.",
+                    temperature=0.4,
+                    max_tokens=200,
+                )
+                statement = response.text.strip() or statement
+            self.hypotheses.add(Hypothesis(statement=statement))
         return self.hypotheses.hypotheses
 
     def verify(self, claim: str, evidence: list[str] | None = None) -> str:
         result = self.verification.verify_claim(claim, evidence)
         questions = self.verification.challenge(claim)
+        self._last_verification = result
         self.trace.verification = result.claim + " | " + "; ".join(questions[:3])
         return self.trace.verification
 
@@ -208,6 +244,31 @@ class CognitiveRuntime:
             return f"[No model provider configured] Prompt was: {prompt[:100]}..."
         response = self.provider.generate(prompt, system=system)
         return response.text
+
+    def _budget_exceeded(self) -> bool:
+        return self._step_count >= self.budget.max_steps
+
+    def _budget_exceeded_result(
+        self,
+        task_description: str,
+        classification: TaskClassification,
+        plan: Plan | None,
+        start: float,
+    ) -> RuntimeResult:
+        budget_str = f"{self._step_count}/{self.budget.max_steps} steps"
+        self.trace.decisions.append(f"Stopped: budget exhausted ({budget_str}).")
+        if self.cog_log:
+            self.cog_log.log_step("BUDGET_EXCEEDED", budget_str)
+        return RuntimeResult(
+            success=False,
+            answer="",
+            goal=task_description,
+            plan=plan,
+            uncertainty="Stopped before completion: step budget exhausted.",
+            trace=self.trace,
+            duration_seconds=time.time() - start,
+            depth=classification.depth,
+        )
 
     def run(self, task_description: str, **kwargs: Any) -> RuntimeResult:
         start = time.time()
@@ -220,6 +281,7 @@ class CognitiveRuntime:
             self.cog_log.log_step('TASK_RECEIVED', task_description)
 
         classification = self.classify(task_description)
+        self._step_count += 1
         self.trace.cognitive_mode = classification.depth.value
 
         if self.cog_log:
@@ -241,12 +303,20 @@ class CognitiveRuntime:
         self.trace.goal = task_description
 
         plan = self.plan_task(task)
+        self._step_count += 1
         self.trace.decisions.append(f"Selected policy: {classification.depth.value}")
 
         if self.cog_log:
             self.cog_log.log_plan([s.action for s in plan.steps])
 
+        if self._budget_exceeded():
+            return self._budget_exceeded_result(task_description, classification, plan, start)
+
+        # Single retrieval pass, reused below and passed into the context
+        # compiler — it used to be recomputed a second time inside
+        # ContextCompiler.compile() with a different scoring implementation.
         retrieved = self.episodic_retriever.retrieve(task_description, limit=3)
+        retrieved_episodes = [r.episode for r in retrieved]
         if retrieved:
             self.trace.observations.append(f"Found {len(retrieved)} relevant past experiences")
             if self.cog_log:
@@ -260,6 +330,7 @@ class CognitiveRuntime:
 
         if classification.requires_hypotheses:
             hypotheses = self.generate_hypotheses([task_description])
+            self._step_count += 1
             if self.cog_log:
                 for h in hypotheses:
                     self.cog_log.log_hypothesis(h.statement, h.posterior_confidence)
@@ -273,15 +344,11 @@ class CognitiveRuntime:
             plan=plan,
             hypotheses=self.hypotheses,
             metacognition=self.metacognition,
+            retrieved_episodes=retrieved_episodes,
         )
 
-        if retrieved:
-            lessons = []
-            for r in retrieved:
-                if r.episode.lesson:
-                    lessons.append(r.episode.lesson)
-            if lessons:
-                ctx.memory_summary = "; ".join(lessons[:3])
+        if self._budget_exceeded():
+            return self._budget_exceeded_result(task_description, classification, plan, start)
 
         use_tools = kwargs.get("use_tools", False)
 
@@ -303,14 +370,50 @@ class CognitiveRuntime:
             answer = self.ask_llm(prompt, system="You are the AGI Cognitive Runtime. Think step by step.")
         else:
             answer = f"Cognitive runtime processed: {task_description} (depth={classification.depth.value})"
+        self._step_count += 1
 
+        success = True
         if classification.requires_verification:
-            verification_result = self.verify(answer)
+            verification_text = self.verify(answer)
+            self._step_count += 1
+            vr = self._last_verification
+
+            # This is where metacognition used to be inert: current_confidence
+            # stayed at its 0.5 default for the whole run and should_proceed()/
+            # should_ask_user() were never called, so nothing downstream ever
+            # acted on them. Now the verification result actually updates the
+            # state, and should_ask_user() actually affects `success` below —
+            # with no provider, vr stays at its VerificationResult defaults
+            # (confidence 0.5, is_verified False), so should_ask_user() stays
+            # False and behaviour is unchanged from before in that case.
+            if vr is not None:
+                self.metacognition.current_confidence = vr.confidence
+                self.metacognition.failure_risk = round(1.0 - vr.confidence, 4)
+                self.metacognition.known_unknowns = list(vr.concerns)
+                self.metacognition.uncertainty_sources = list(vr.concerns)
+                self.metacognition.verification_status = (
+                    "verified" if vr.is_verified else "unverified"
+                )
+                if vr.concerns:
+                    self.trace.uncertainty = "; ".join(vr.concerns)
+
+                if self.metacognition.should_ask_user():
+                    success = False
+                    self.trace.decisions.append(
+                        "should_ask_user() == True: low confidence / multiple uncertainty "
+                        "sources from verification — not asserting success without review."
+                    )
+                elif not self.metacognition.should_proceed():
+                    self.trace.decisions.append(
+                        "should_proceed() == False: confidence below threshold, proceeding "
+                        "anyway but flagging it rather than silently reporting success."
+                    )
+
             if self.cog_log:
                 self.cog_log.log_verification(
                     'Answer verified',
-                    verification_result[:100],
-                    'PASS' in verification_result or len(verification_result) == 0
+                    verification_text[:100],
+                    'PASS' in verification_text or len(verification_text) == 0
                 )
 
         lesson = f"Completed task with depth {classification.depth.value}"
@@ -327,6 +430,7 @@ class CognitiveRuntime:
         ))
 
         self.goals.complete_goal(goal.id)
+        self._step_count += 1
         elapsed = time.time() - start
 
         if self.cog_log:
@@ -337,11 +441,12 @@ class CognitiveRuntime:
             self.cog_log.summary(elapsed * 1000)
 
         return RuntimeResult(
-            success=True,
+            success=success,
             answer=answer,
             goal=task_description,
             plan=plan,
             verification=self.trace.verification,
+            uncertainty=self.trace.uncertainty,
             lessons=self.trace.lessons,
             trace=self.trace,
             duration_seconds=elapsed,

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
-from agi_runtime.memory.models import Memory
+from agi_runtime.memory.models import Episode, Memory
 from agi_runtime.knowledge.store import KnowledgeStore
 from agi_runtime.world.model import WorldModel
 from agi_runtime.planning.plan import Plan
@@ -71,6 +71,7 @@ class ContextCompiler:
         plan: Plan | None = None,
         hypotheses: HypothesisSpace | None = None,
         metacognition: MetacognitiveState | None = None,
+        retrieved_episodes: list[Episode] | None = None,
         max_concepts: int = 10,
         max_principles: int = 5,
     ) -> CognitiveContext:
@@ -88,7 +89,16 @@ class ContextCompiler:
         if metacognition:
             ctx.metacognition = metacognition
 
-        episodes = self.memory.find_similar_episodes(task_description, limit=3)
+        # Callers that already ran retrieval this turn (e.g. CognitiveRuntime.run,
+        # which needs the episodes earlier for its own trace) should pass
+        # retrieved_episodes so this doesn't score the whole episode store a
+        # second time with a second call. Only retrieve here as a fallback for
+        # callers that use the compiler standalone.
+        episodes = (
+            retrieved_episodes
+            if retrieved_episodes is not None
+            else self.memory.find_similar_episodes(task_description, limit=3)
+        )
         if episodes:
             lessons = [ep.lesson for ep in episodes if ep.lesson]
             ctx.memory_summary = "; ".join(lessons[:3])
