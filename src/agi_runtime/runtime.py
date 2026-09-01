@@ -116,11 +116,16 @@ class CognitiveRuntime:
     def classify(self, task: str) -> TaskClassification:
         task_lower = task.lower()
 
-        uncertainty_words = ["why", "how", "investigate", "debug", "diagnose", "uncertain", "unknown"]
-        planning_words = ["build", "create", "implement", "deploy", "design", "architecture"]
-        experiment_words = ["experiment", "hypothesis", "test whether", "compare"]
-        adapt_words = ["recover", "fix", "adapt", "change", "retry"]
-        long_words = ["project", "long-term", "persistent", "multi-session"]
+        uncertainty_words = ["why", "how", "investigate", "debug", "diagnose", "uncertain", "unknown",
+                             "por qué", "por que", "investiga", "depura", "diagnostica", "desconocido"]
+        planning_words = ["build", "create", "implement", "deploy", "design", "architecture",
+                          "construir", "crear", "implementar", "diseñar", "arquitectura"]
+        experiment_words = ["experiment", "hypothesis", "test whether", "compare",
+                           "experimento", "hipótesis", "prueba si", "compara"]
+        adapt_words = ["recover", "fix", "adapt", "change", "retry",
+                      "recuperar", "arreglar", "adaptar", "cambiar", "reintenta"]
+        long_words = ["project", "long-term", "persistent", "multi-session",
+                     "proyecto", "largo plazo", "permanente", "multi-sesión"]
 
         uncertainty = sum(1 for w in uncertainty_words if w in task_lower)
         planning = sum(1 for w in planning_words if w in task_lower)
