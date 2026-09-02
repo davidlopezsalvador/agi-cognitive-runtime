@@ -79,8 +79,15 @@ class ContextCompiler:
 
         relevant = self.knowledge.search(task_description, limit=max_concepts)
         ctx.relevant_concepts = [e.name or e.id for e in relevant]
-        principles = self.knowledge.by_type("principle")
-        ctx.relevant_principles = [e.name or e.id for e in principles[:max_principles]]
+        # `by_type("principle")[:max_principles]` used to ignore relevance
+        # entirely — it always returned the first N principles in the store,
+        # regardless of `task_description`, so the "PRINCIPLES:" block in the
+        # compiled prompt was arbitrary rather than task-relevant, and any
+        # non-"principle" entry (heuristic, pattern, ...) could never appear
+        # here no matter how relevant. Filter the same relevance-ranked
+        # `relevant` list by type instead of re-querying by_type() blind.
+        relevant_typed = [e for e in relevant if e.type in ("principle", "heuristic", "pattern")]
+        ctx.relevant_principles = [e.name or e.id for e in relevant_typed[:max_principles]]
 
         if plan:
             ctx.current_plan = plan
