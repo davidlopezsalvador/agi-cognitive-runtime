@@ -109,7 +109,20 @@ class OpenCodeProvider(ModelProvider):
 
             text = ""
             if isinstance(data, dict):
-                text = data.get("text", "") or data.get("content", "") or json.dumps(data)
+                # OpenCode returns {"parts": [...], ...}
+                parts = data.get("parts", [])
+                if parts:
+                    # Extract text from step-finish or text parts
+                    for part in reversed(parts):
+                        if isinstance(part, dict):
+                            if part.get("type") == "text" and part.get("text"):
+                                text = part["text"]
+                                break
+                            if part.get("type") == "step-finish":
+                                # The text part before step-finish has the answer
+                                continue
+                if not text:
+                    text = data.get("text", "") or data.get("content", "") or json.dumps(data)
             elif isinstance(data, str):
                 text = data
             else:

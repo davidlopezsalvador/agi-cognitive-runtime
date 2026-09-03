@@ -366,8 +366,8 @@ class CognitiveRuntime:
                     self.cog_log.log_tool_call(tc.tool_name, tc.arguments, tc.result[:100])
         elif self.provider:
             prompt = ctx.to_prompt()
-            prompt += f"\n\nTask: {task_description}\n\nProvide a structured response with: objective, approach, result."
-            answer = self.ask_llm(prompt, system="You are the AGI Cognitive Runtime. Think step by step.")
+            prompt += f"\n\nTask: {task_description}\n\nExecute this task now. Do not just describe what you would do — actually do it. Provide the specific details, examples, and concrete outputs as if you were performing the work."
+            answer = self.ask_llm(prompt, system="You are the AGI Cognitive Runtime. Think step by step and execute the task directly.")
         else:
             answer = f"Cognitive runtime processed: {task_description} (depth={classification.depth.value})"
         self._step_count += 1
