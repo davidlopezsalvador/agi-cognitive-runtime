@@ -21,10 +21,6 @@ def _get_runtime():
     from agi_runtime.providers.factory import create_provider
     provider = create_provider()
     runtime = CognitiveRuntime(model_provider=provider)
-
-    from knowledge.seed import seed_knowledge
-    seed_knowledge(runtime.knowledge)
-
     return runtime
 
 

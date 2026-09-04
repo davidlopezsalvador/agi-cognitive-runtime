@@ -1,0 +1,242 @@
+23:22:29 [INFO] [  0] TASK_RECEIVED: Convert 5 km to miles
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L0_direct Complexity=0.00
+23:22:29 [DEBUG]       Data: {"depth": "L0_direct", "complexity": 0.0, "keywords": ["Uncertainty=0", "Planning=0", "Experiment=0", "Adapt=0", "Long=0"]}
+23:22:29 [INFO] [  2] PLAN: Generated 1 steps
+23:22:29 [DEBUG]       Data: {"steps": ["Execute: Convert 5 km to miles"]}
+23:22:29 [INFO] [  3] MEMORY: Query="Convert 5 km to miles" Results=0 TopRelevance=0.00
+23:22:29 [DEBUG]       Data: {"query": "Convert 5 km to miles", "results_count": 0, "top_relevance": 0}
+23:22:29 [INFO] [  4] LEARN: Completed task with depth L0_direct
+23:22:29 [INFO] [  5] METACOG: Confidence=0.50
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": ""}}
+23:22:29 [INFO] 
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO]   Total pasos: 6
+23:22:29 [INFO]   Hipotesis generadas: 0
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Verificaciones: 0
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Duracion: 5.2ms
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] [  0] TASK_RECEIVED: What is the meaning of life?
+23:22:29 [INFO] [  0] TASK_RECEIVED: What is the meaning of life?
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L0_direct Complexity=0.00
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L0_direct Complexity=0.00
+23:22:29 [DEBUG]       Data: {"depth": "L0_direct", "complexity": 0.0, "keywords": ["Uncertainty=0", "Planning=0", "Experiment=0", "Adapt=0", "Long=0"]}
+23:22:29 [DEBUG]       Data: {"depth": "L0_direct", "complexity": 0.0, "keywords": ["Uncertainty=0", "Planning=0", "Experiment=0", "Adapt=0", "Long=0"]}
+23:22:29 [INFO] [  2] PLAN: Generated 1 steps
+23:22:29 [INFO] [  2] PLAN: Generated 1 steps
+23:22:29 [DEBUG]       Data: {"steps": ["Execute: What is the meaning of life?"]}
+23:22:29 [DEBUG]       Data: {"steps": ["Execute: What is the meaning of life?"]}
+23:22:29 [INFO] [  3] MEMORY: Query="What is the meaning of life?" Results=0 TopRelevance=0.00
+23:22:29 [INFO] [  3] MEMORY: Query="What is the meaning of life?" Results=0 TopRelevance=0.00
+23:22:29 [DEBUG]       Data: {"query": "What is the meaning of life?", "results_count": 0, "top_relevance": 0}
+23:22:29 [DEBUG]       Data: {"query": "What is the meaning of life?", "results_count": 0, "top_relevance": 0}
+23:22:29 [INFO] [  4] LEARN: Completed task with depth L0_direct
+23:22:29 [INFO] [  4] LEARN: Completed task with depth L0_direct
+23:22:29 [INFO] [  5] METACOG: Confidence=0.50
+23:22:29 [INFO] [  5] METACOG: Confidence=0.50
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": ""}}
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": ""}}
+23:22:29 [INFO] 
+23:22:29 [INFO] 
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO]   Total pasos: 6
+23:22:29 [INFO]   Total pasos: 6
+23:22:29 [INFO]   Hipotesis generadas: 0
+23:22:29 [INFO]   Hipotesis generadas: 0
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Verificaciones: 0
+23:22:29 [INFO]   Verificaciones: 0
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Duracion: 9.2ms
+23:22:29 [INFO]   Duracion: 9.2ms
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] [  0] TASK_RECEIVED: Investigate why the system is slow
+23:22:29 [INFO] [  0] TASK_RECEIVED: Investigate why the system is slow
+23:22:29 [INFO] [  0] TASK_RECEIVED: Investigate why the system is slow
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L3_investigate Complexity=0.60
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L3_investigate Complexity=0.60
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L3_investigate Complexity=0.60
+23:22:29 [DEBUG]       Data: {"depth": "L3_investigate", "complexity": 0.6, "keywords": ["Uncertainty=3", "Planning=0", "Experiment=0", "Adapt=0", "Long=0"]}
+23:22:29 [DEBUG]       Data: {"depth": "L3_investigate", "complexity": 0.6, "keywords": ["Uncertainty=3", "Planning=0", "Experiment=0", "Adapt=0", "Long=0"]}
+23:22:29 [DEBUG]       Data: {"depth": "L3_investigate", "complexity": 0.6, "keywords": ["Uncertainty=3", "Planning=0", "Experiment=0", "Adapt=0", "Long=0"]}
+23:22:29 [INFO] [  2] PLAN: Generated 8 steps
+23:22:29 [INFO] [  2] PLAN: Generated 8 steps
+23:22:29 [INFO] [  2] PLAN: Generated 8 steps
+23:22:29 [DEBUG]       Data: {"steps": ["Understand: Investigate why the system is slow", "Extract constraints and unknowns", "Generate hypotheses", "Design experiments", "Execute experiments", "Evaluate evidence", "Verify results", "Extract lessons"]}
+23:22:29 [DEBUG]       Data: {"steps": ["Understand: Investigate why the system is slow", "Extract constraints and unknowns", "Generate hypotheses", "Design experiments", "Execute experiments", "Evaluate evidence", "Verify results", "Extract lessons"]}
+23:22:29 [DEBUG]       Data: {"steps": ["Understand: Investigate why the system is slow", "Extract constraints and unknowns", "Generate hypotheses", "Design experiments", "Execute experiments", "Evaluate evidence", "Verify results", "Extract lessons"]}
+23:22:29 [INFO] [  3] MEMORY: Query="Investigate why the system is slow" Results=0 TopRelevance=0.00
+23:22:29 [INFO] [  3] MEMORY: Query="Investigate why the system is slow" Results=0 TopRelevance=0.00
+23:22:29 [INFO] [  3] MEMORY: Query="Investigate why the system is slow" Results=0 TopRelevance=0.00
+23:22:29 [DEBUG]       Data: {"query": "Investigate why the system is slow", "results_count": 0, "top_relevance": 0}
+23:22:29 [DEBUG]       Data: {"query": "Investigate why the system is slow", "results_count": 0, "top_relevance": 0}
+23:22:29 [DEBUG]       Data: {"query": "Investigate why the system is slow", "results_count": 0, "top_relevance": 0}
+23:22:29 [INFO] [  4] HYPOTHESIS: Hypothesis from: Investigate why the system is slow (conf=0.50)
+23:22:29 [INFO] [  4] HYPOTHESIS: Hypothesis from: Investigate why the system is slow (conf=0.50)
+23:22:29 [INFO] [  4] HYPOTHESIS: Hypothesis from: Investigate why the system is slow (conf=0.50)
+23:22:29 [DEBUG]       Data: {"hypothesis": "Hypothesis from: Investigate why the system is slow", "confidence": 0.5}
+23:22:29 [DEBUG]       Data: {"hypothesis": "Hypothesis from: Investigate why the system is slow", "confidence": 0.5}
+23:22:29 [DEBUG]       Data: {"hypothesis": "Hypothesis from: Investigate why the system is slow", "confidence": 0.5}
+23:22:29 [INFO] [  5] VERIFY: [FAIL] Answer verified
+23:22:29 [INFO] [  5] VERIFY: [FAIL] Answer verified
+23:22:29 [INFO] [  5] VERIFY: [FAIL] Answer verified
+23:22:29 [DEBUG]       Data: {"claim": "Answer verified", "result": "Cognitive runtime processed: Investigate why the system is slow (depth=L3_investigate) | What could ", "passed": false}
+23:22:29 [DEBUG]       Data: {"claim": "Answer verified", "result": "Cognitive runtime processed: Investigate why the system is slow (depth=L3_investigate) | What could ", "passed": false}
+23:22:29 [DEBUG]       Data: {"claim": "Answer verified", "result": "Cognitive runtime processed: Investigate why the system is slow (depth=L3_investigate) | What could ", "passed": false}
+23:22:29 [INFO] [  6] LEARN: Completed task with depth L3_investigate
+23:22:29 [INFO] [  6] LEARN: Completed task with depth L3_investigate
+23:22:29 [INFO] [  6] LEARN: Completed task with depth L3_investigate
+23:22:29 [INFO] [  7] METACOG: Confidence=0.50
+23:22:29 [INFO] [  7] METACOG: Confidence=0.50
+23:22:29 [INFO] [  7] METACOG: Confidence=0.50
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": "unverified"}}
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": "unverified"}}
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": "unverified"}}
+23:22:29 [INFO] 
+23:22:29 [INFO] 
+23:22:29 [INFO] 
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO]   Total pasos: 8
+23:22:29 [INFO]   Total pasos: 8
+23:22:29 [INFO]   Total pasos: 8
+23:22:29 [INFO]   Hipotesis generadas: 1
+23:22:29 [INFO]   Hipotesis generadas: 1
+23:22:29 [INFO]   Hipotesis generadas: 1
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Verificaciones: 1
+23:22:29 [INFO]   Verificaciones: 1
+23:22:29 [INFO]   Verificaciones: 1
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Duracion: 7.8ms
+23:22:29 [INFO]   Duracion: 7.8ms
+23:22:29 [INFO]   Duracion: 7.8ms
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] [  0] TASK_RECEIVED: Fix the performance issue
+23:22:29 [INFO] [  0] TASK_RECEIVED: Fix the performance issue
+23:22:29 [INFO] [  0] TASK_RECEIVED: Fix the performance issue
+23:22:29 [INFO] [  0] TASK_RECEIVED: Fix the performance issue
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L5_adapt Complexity=0.20
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L5_adapt Complexity=0.20
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L5_adapt Complexity=0.20
+23:22:29 [INFO] [  1] CLASSIFY: Depth=L5_adapt Complexity=0.20
+23:22:29 [DEBUG]       Data: {"depth": "L5_adapt", "complexity": 0.2, "keywords": ["Uncertainty=0", "Planning=0", "Experiment=0", "Adapt=1", "Long=0"]}
+23:22:29 [DEBUG]       Data: {"depth": "L5_adapt", "complexity": 0.2, "keywords": ["Uncertainty=0", "Planning=0", "Experiment=0", "Adapt=1", "Long=0"]}
+23:22:29 [DEBUG]       Data: {"depth": "L5_adapt", "complexity": 0.2, "keywords": ["Uncertainty=0", "Planning=0", "Experiment=0", "Adapt=1", "Long=0"]}
+23:22:29 [DEBUG]       Data: {"depth": "L5_adapt", "complexity": 0.2, "keywords": ["Uncertainty=0", "Planning=0", "Experiment=0", "Adapt=1", "Long=0"]}
+23:22:29 [INFO] [  2] PLAN: Generated 6 steps
+23:22:29 [INFO] [  2] PLAN: Generated 6 steps
+23:22:29 [INFO] [  2] PLAN: Generated 6 steps
+23:22:29 [INFO] [  2] PLAN: Generated 6 steps
+23:22:29 [DEBUG]       Data: {"steps": ["Understand: Fix the performance issue", "Extract constraints and unknowns", "Plan approach", "Execute approach", "Verify results", "Extract lessons"]}
+23:22:29 [DEBUG]       Data: {"steps": ["Understand: Fix the performance issue", "Extract constraints and unknowns", "Plan approach", "Execute approach", "Verify results", "Extract lessons"]}
+23:22:29 [DEBUG]       Data: {"steps": ["Understand: Fix the performance issue", "Extract constraints and unknowns", "Plan approach", "Execute approach", "Verify results", "Extract lessons"]}
+23:22:29 [DEBUG]       Data: {"steps": ["Understand: Fix the performance issue", "Extract constraints and unknowns", "Plan approach", "Execute approach", "Verify results", "Extract lessons"]}
+23:22:29 [INFO] [  3] MEMORY: Query="Fix the performance issue" Results=0 TopRelevance=0.00
+23:22:29 [INFO] [  3] MEMORY: Query="Fix the performance issue" Results=0 TopRelevance=0.00
+23:22:29 [INFO] [  3] MEMORY: Query="Fix the performance issue" Results=0 TopRelevance=0.00
+23:22:29 [INFO] [  3] MEMORY: Query="Fix the performance issue" Results=0 TopRelevance=0.00
+23:22:29 [DEBUG]       Data: {"query": "Fix the performance issue", "results_count": 0, "top_relevance": 0}
+23:22:29 [DEBUG]       Data: {"query": "Fix the performance issue", "results_count": 0, "top_relevance": 0}
+23:22:29 [DEBUG]       Data: {"query": "Fix the performance issue", "results_count": 0, "top_relevance": 0}
+23:22:29 [DEBUG]       Data: {"query": "Fix the performance issue", "results_count": 0, "top_relevance": 0}
+23:22:29 [INFO] [  4] LEARN: Completed task with depth L5_adapt
+23:22:29 [INFO] [  4] LEARN: Completed task with depth L5_adapt
+23:22:29 [INFO] [  4] LEARN: Completed task with depth L5_adapt
+23:22:29 [INFO] [  4] LEARN: Completed task with depth L5_adapt
+23:22:29 [INFO] [  5] METACOG: Confidence=0.50
+23:22:29 [INFO] [  5] METACOG: Confidence=0.50
+23:22:29 [INFO] [  5] METACOG: Confidence=0.50
+23:22:29 [INFO] [  5] METACOG: Confidence=0.50
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": ""}}
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": ""}}
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": ""}}
+23:22:29 [DEBUG]       Data: {"confidence": 0.5, "state": {"current_confidence": 0.5, "strongest_assumption": "", "weakest_assumption": "", "known_unknowns": [], "uncertainty_sources": [], "possible_biases": [], "alternative_strategies": [], "failure_risk": 0.5, "verification_status": ""}}
+23:22:29 [INFO] 
+23:22:29 [INFO] 
+23:22:29 [INFO] 
+23:22:29 [INFO] 
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] RESUMEN DE EJECUCION
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO]   Total pasos: 6
+23:22:29 [INFO]   Total pasos: 6
+23:22:29 [INFO]   Total pasos: 6
+23:22:29 [INFO]   Total pasos: 6
+23:22:29 [INFO]   Hipotesis generadas: 0
+23:22:29 [INFO]   Hipotesis generadas: 0
+23:22:29 [INFO]   Hipotesis generadas: 0
+23:22:29 [INFO]   Hipotesis generadas: 0
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Consultas a memoria: 1
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Conocimiento aplicado: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Tool calls: 0
+23:22:29 [INFO]   Verificaciones: 0
+23:22:29 [INFO]   Verificaciones: 0
+23:22:29 [INFO]   Verificaciones: 0
+23:22:29 [INFO]   Verificaciones: 0
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Lecciones aprendidas: 1
+23:22:29 [INFO]   Duracion: 5.2ms
+23:22:29 [INFO]   Duracion: 5.2ms
+23:22:29 [INFO]   Duracion: 5.2ms
+23:22:29 [INFO]   Duracion: 5.2ms
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================
+23:22:29 [INFO] ============================================================

@@ -90,8 +90,7 @@ class TransferDemonstrator:
         return results
 
     def populate_from_seed(self) -> None:
-        from knowledge.seed import seed_knowledge
-        seed_knowledge(self.knowledge)
+        pass
 
         self.memory.store_episode(Episode(
             task="Debug network latency",
