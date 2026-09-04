@@ -74,6 +74,76 @@ per-step tool use, verification, and replanning on failure) is a bigger
 redesign than this pass, and again needs a decision on what a "step
 executor" protocol looks like.
 
+## GLM's independent DebugBench results — rescored (this session)
+
+A separate GLM/OpenCode session (David's usual two-agent workflow) ran
+its own experiments against `ling-3.0-flash-fin-free` and committed
+several results docs (`DEBUGBENCH_HEURISTICS_RESULTS.md`,
+`DEBUGBENCH_EXCERPT_RESULTS.md`, `DEBUGBENCH_FULL_BOOK_RESULTS.md`,
+`LITERARY_EXPERIMENT_FINAL.md`, `BBH_REASONING_TEST.md`, and the actual
+data: `debugbench_8heuristics_results.json` with 15 real DebugBench
+problems, `lazarillo_heuristics.py`/`quijote_heuristics.py` with the
+actual 8 heuristics used).
+
+**Scoring flaw found and corrected.** `analyze_medium.py` (the only
+analysis script present in this upload) scores correctness by exact
+string match against `oracle_code` after stripping whitespace — not
+execution. That fails any functionally-correct fix that isn't
+byte-identical to the oracle (renamed variables, reordered logic, an
+extra comment). `benchmarks/debugbench_rescore.py` (new, this session)
+re-scores the same 15-problem dataset via differential testing (execute
+candidate vs. oracle across random + structured edge-case inputs;
+falls back to AST-normalized structural comparison, then plain string
+match, reporting which method was used per problem — never silently
+mixing rigor levels):
+
+| | Exact string match (original) | Execution-based (corrected) |
+|---|---|---|
+| No literary | 7/15 (47%) | 12/15 (80%) |
+| 8 literary heuristics | 10/15 (67%) | 13/15 (87%) |
+| **Delta** | **+20pp** | **+7pp** |
+
+The headline "+20%" in `DEBUGBENCH_HEURISTICS_RESULTS.md` was
+substantially a scoring artifact — both conditions' true correctness was
+far higher than exact-match showed, and the real delta shrinks to about
+a third the size. +7pp on N=15, one run per condition, is still not
+distinguishable from noise — this fixes the SCORING bias, not the
+SAMPLE-SIZE problem; both need fixing before trusting a number here.
+
+**Known limitation of the rescore harness itself, flagged rather than
+hidden:** `binary-search` fails execution-based testing in BOTH
+conditions — but that problem's bug (`bug_type: condition error`, in a
+`while` loop) assumes a sorted input array, and the harness's random
+`List[int]` generator doesn't sort inputs for 2+-parameter signatures
+(only single-list-param problems get the structured/sorted edge cases).
+That specific "fail" may be a harness artifact (comparing behavior
+outside the algorithm's valid domain), not a genuine shared bug. Noted
+in the script's own output rather than quietly treated as a clean result.
+
+**Internal contradiction across GLM's own docs, unresolved:**
+`DEBUGBENCH_EXCERPT_RESULTS.md` concludes raw literary text consistently
+hurts accuracy (-13% to -20% across 500/1000/2000-token excerpts and the
+full book) and only distilled heuristics help (+7%). `LITERARY_EXPERIMENT_FINAL.md`
+(dated later, 2026-09-03) concludes the opposite — "distilled doesn't
+work, raw text passages DO" — but drops the accuracy metric entirely in
+favor of response length (~500 vs ~15,000 chars) and a self-reported
+confidence score (50% vs 85%, source unstated), on a different,
+non-DebugBench, N=1 task. That swap from an objective metric to
+length/self-reported-confidence is exactly the two signals most
+confounded by "long narrative context in the prompt primes long,
+elaborate output" — not established as evidence of better reasoning.
+Also flagged: that doc's "session contamination" exclusion criterion
+(discarding sessions that didn't show the effect) has no pre-registered
+definition, so it can't be distinguished from result-shopping as
+documented.
+
+**Not yet done:** wiring GLM's actual heuristics/control into the
+three-arm harness (`compare_n_arm.py`) with the corrected scorer and
+real repetitions — this session only fixed the scoring bias on the
+existing single-run data, which was the most urgent fix given how much
+the exact-match method was distorting both conditions. The N=1 problem
+is still open.
+
 ## Suggested next audit target
 
 `plan_task()` → real step-by-step execution, since that's the piece that
