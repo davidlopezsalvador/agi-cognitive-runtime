@@ -1,0 +1,198 @@
+{
+  "source": "Don Quijote de la Mancha",
+  "author": "Miguel de Cervantes Saavedra",
+  "total_heuristics": 10,
+  "methodology": "Deep extraction from specific scenes with debugging applications",
+  "heuristics": [
+    {
+      "id": 1,
+      "name": "The Windmill Epistemology",
+      "scene": "Don Quijote ve molinos como gigantes, Sancho los ve como molinos",
+      "passage": "Mire vuestra merced -respondió Sancho- que aquellos que allí se parecen no son gigantes, sino molinos de viento",
+      "surface_lesson": "Verificar percepciones",
+      "deep_lesson": "El cerebro humano tiene un sesgo de confirmación tan fuerte que puede transformar la realidad para ajustarla a sus expectativas. Don Quijote no está 'loco' - está aplicando un modelo mental que fue válido en los libros de caballerías pero no en el mundo real. El debugging ocurre cuando nuestro modelo mental del código no coincide con el código real.",
+      "debugging_principle": "Cuando el debug 'no funciona', no es que el código sea complicado - es que tu modelo mental del código está mal. El primer paso no es arreglar el código, sino arreglar tu comprensión del código.",
+      "triggers": [
+        "model_mismatch",
+        "confirmation_bias",
+        "reality_gap"
+      ],
+      "applications": [
+        "Cuando un test falla, pregunta: '¿Qué creo que hace el código?' vs '¿Qué hace realmente?'",
+        "Los bugs más difíciles son los que no puedes ver porque tu cerebro los filtra",
+        "Usa logging/debugging para ver el estado real, no el que esperas"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "The Celada Paradox",
+      "scene": "Don Quijote hace una celada de cartón, la prueba con su espada, y se rompe. La rehace con barras de hierro pero NO LA VUELVE A PROBAR",
+      "passage": "sacó su espada y le dio dos golpes, y con el primero y en un punto deshizo lo que había hecho en una semana; y no dejó de parecerle mal la facilidad con que la había hecho pedazos, y, por asegurarse deste peligro, la tornó a hacer de nuevo, ponéndole unas barras de hierro por de dentro, de tal manera que él quedó satisfecho de su fortaleza; y, sin querer hacer nueva experiencia della, la diputó y tuvo por celada finísima de encaje",
+      "surface_lesson": "Probar antes de usar",
+      "deep_lesson": "Don Quijote comete un error crucial: prueba la celada UNA vez, se rompe, la rehace, PERO NO LA VUELVE A PROBAR. En su mente, la segunda versión ES fuerte porque la hizo diferente. Este es el sesgo de 'correlation implies improvement' - asumir que un cambio = una mejora sin verificar.",
+      "debugging_principle": "Después de cada fix, RE-TEST. No asumas que tu corrección funciona solo porque la hiciste. El código no tiene memoria de tus intenciones - solo ejecuta lo que le dices.",
+      "triggers": [
+        "untested_assumptions",
+        "correlation_vs_causation",
+        "regression"
+      ],
+      "applications": [
+        "Después de cada cambio, ejecuta los tests de regresión",
+        "No confíes en tu 'intuición' de que algo funciona - pruébalo",
+        "El debugging no termina cuando el test pasa una vez - termina cuando pasa consistentemente"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Sancho's Pragmatic Ontology",
+      "scene": "Sancho consistentemente ve el mundo como ES, no como DEBERÍA SER. Su sabiduría no es intelectual sino supervivencial.",
+      "passage": "Aquello no son gigantes, sino molinos de viento",
+      "surface_lesson": "Ser práctico",
+      "deep_lesson": "Sancho representa una epistemología diferente: no busca significado profundo, busca funciona. Mientras Don Quijote pregunta '¿qué significa esto?', Sancho pregunta '¿qué hago con esto?'. En debugging, esto es crucial: no necesitas entender la arquitectura completa para arreglar un bug - necesitas entender QUÉ ESTÁ MAL AHORA y CÓMO ARREGLARLO.",
+      "debugging_principle": "No te pierdas en el analysis paralysis. Identifica el bug más cercano, arréglalo, verifica, y sigue. La perfección es enemiga del progreso.",
+      "triggers": [
+        "analysis_paralysis",
+        "scope_creep",
+        "pragmatism"
+      ],
+      "applications": [
+        "Un bug a la vez - no intentes arreglar todo de golpe",
+        "Primero haz que funcione, después haz que sea bonito",
+        "Si un fix funciona, ACEPTALO aunque no entiendas por qué"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "The Dulcinea Delusion",
+      "scene": "Don Quijote convierte a una campesina vulgar (Aldonza Lorenzo) en la perfecta Dulcinea del Toboso. Sancho miente sobre ella para proteger a su amo.",
+      "passage": "fingió que la había visto en Sierra Morena, dándole recados de su señor, y de tal manera le pintó y se la encareció, que en todas las señales de bondad y Hermosura le puso la\nporos encima",
+      "surface_lesson": "Cuidado con las ilusiones",
+      "deep_lesson": "Don Quijote CREA una realidad alternativa donde Dulcinea es perfecta. Sancho MANTIENE esa realidad con mentiras. Esto es peligroso en programación: cuando creas una abstracción que no existe (un 'framework' que en realidad es un script), o cuando mantienes una mentira técnica ('esto es temporal' pero nunca lo cambias). La deuda técnica es la Dulcinea del programador.",
+      "debugging_principle": "Identifica las 'Dulcineas' en tu código: abstracciones que creaste que no corresponden a la realidad. Refactorizar no es opcional - es necesario para evitar que la brecha entre modelo y realidad crezca.",
+      "triggers": [
+        "technical_debt",
+        "abstraction_leak",
+        "fictional_architecture"
+      ],
+      "applications": [
+        "Audita tus abstracciones: ¿realmente representan lo que dicen?",
+        "La deuda técnica es una mentira que se acumula - págala antes de que te explote",
+        "Si tu código tiene 'TODO: temporal', probablemente no es temporal"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "The Rocinante Metamorphosis",
+      "scene": "Don Quijote renombra a su viejo caballo flaco como 'Rocinante' - un nombre que suena noble pero describe exactamente lo que es: un rocín (caballo de trabajo) que ahora es 'el primero de todos los rocines'",
+      "passage": "al fin le vino a llamar Rocinante: nombre, a su parecer, alto, sonoro y significativo de lo que había sido cuando fue rocín, antes de lo que ahora era, que era antes y primero de todos los rocines del mundo",
+      "surface_lesson": "El nombre no cambia la realidad",
+      "deep_lesson": "Don Quijote cree que nombrar algo lo transforma. Renombrar un caballo flaco no lo hace veloz. Renombrar una función 'processData()' no la hace eficiente. Renombrar una variable 'user' no la hace un objeto de usuario real. Este es el sesgo de 'naming implies understanding' - creer que si puedes nombrar algo, lo entiendes.",
+      "debugging_principle": "No confundas nombrar con entender. Antes de escribir código, asegúrate de que ENTIENDES el problema. Un nombre bueno ayuda, pero no reemplaza la comprensión.",
+      "triggers": [
+        "naming_bias",
+        "false_precision",
+        "cargo_cult"
+      ],
+      "applications": [
+        "Si no puedes nombrar un bug claramente, probablemente no lo entiendes",
+        "Nombres descriptivos ayudan, pero no reemplazan la comprensión",
+        "Cuidado con los 'frameworks' que prometen resolver todo - suelen ser Rocinantes"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "The Venta Confusion",
+      "scene": "Don Quijote confunde una venta (posada) con un castillo. Su错误de percepción crea un mundo donde todo es más grandioso y peligroso de lo que es.",
+      "passage": "Nuestro caballero se figuró que era castillo Acostumbrado",
+      "surface_lesson": "Entender el contexto",
+      "deep_lesson": "Don Quijote no está 'equivocado' - está aplicando un marco de referencia diferente. Para él, una venta SÍ puede ser un castillo si tiene las características correctas. Esto es exactamente lo que hacemos cuando debuggeamos: aplicamos nuestro marco de referencia (lenguaje, framework, patrón) a un problema que puede no ajustarse a ese marco.",
+      "debugging_principle": "Identifica el marco de referencia que estás usando. Si tu debugging 'no funciona', puede que estés aplicando el marco incorrecto. Cambia de perspectiva: ¿cómo vería este bug un experto en otro lenguaje/framework?",
+      "triggers": [
+        "framework_bias",
+        "paradigm_trap",
+        "perspective_shift"
+      ],
+      "applications": [
+        "Si llevas más de 2 horas en un bug, cambia de perspectiva",
+        "Pregunta: '¿Cómo resolvería esto alguien que no conoce este código?'",
+        "Los bugs más difíciles requieren cambiar de paradigma, no de herramienta"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "The Barcelona Humiliation",
+      "scene": "Don Quijote es derrotado por el Caballero de la Blanca Luna, quien le obliga a prometer que dejará la caballería por un año. Esta derrota lo destruye.",
+      "passage": "fue vencido y deshecho, y no solamente perdió la honra, sino que dejó la libertad en poder de su contrário",
+      "surface_lesson": "A veces pierdes",
+      "deep_lesson": "Don Quijote no puede sobrevivir a la derrota porque su IDENTIDAD está ligada a ser invencible. Cuando pierde, no pierde una batalla - pierde quién es. En programación, esto es el 'expert identity trap': creer que tu valor depende de nunca cometer errores. Los mejores programadores son los que pueden admitir 'no sé' y 'me equivoqué'.",
+      "debugging_principle": "No ligues tu identidad a tu código. Un bug no te hace mal programador - te hace humano. Los mejores debuggers son los que pueden admitir que no entienden algo.",
+      "triggers": [
+        "ego_attachment",
+        "identity_trap",
+        "imposter_syndrome"
+      ],
+      "applications": [
+        "Si defiendes tu código agresivamente, probablemente tiene un bug",
+        "Un bug no es un ataque personal - es una oportunidad de aprendizaje",
+        "Los mejores programadores son los que pueden decir 'no sé cómo funciona esto'"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "The Sancho Governor Wisdom",
+      "scene": "Sancho, como gobernador de la ínsula, demuestra una sabiduría práctica que Don Quijote nunca tuvo. Resuelve problemas con sentido común, no con ideales.",
+      "passage": "con estos consejos, y otros que no son menores, quedó gobernada la ínsula, en el espacio de Media signo",
+      "surface_lesson": "El sentido común funciona",
+      "deep_lesson": "Sancho demuestra que la gobernanza (y la programación) no requiere genialidad - requiere consistencia, sentido común, y la humildad para escuchar. Don Quijote fracasa como líder porque impone sus ideales; Sancho triunfa porque adapta sus acciones a la realidad. En equipos de desarrollo, el 'arquitecto estrella' que impone su visión suele fracasar; el equipo que escucha al usuario y adapta suele triunfar.",
+      "debugging_principle": "El mejor debugger no es el más inteligente - es el más curioso y el más humble. Escucha al código, no a tu ego.",
+      "triggers": [
+        "ego_vs_curiosity",
+        "listening",
+        "humble_debugging"
+      ],
+      "applications": [
+        "Cuando debuggeas, escucha lo que el código te dice, no lo que quieres que diga",
+        "Los logs son tu Sancho - te dicen la verdad aunque no te guste",
+        "Si tu debugging depende de ser 'el más listo', ya perdiste"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "The Cautivo's Parallel Journey",
+      "scene": "El cautivo cuenta su historia de cautiverio y escape, paralela a la de Don Quijote pero en el mundo real.",
+      "passage": "cuenta el cautivo su vida y successes",
+      "surface_lesson": "Hay múltiples perspectivas",
+      "deep_lesson": "Cervantes inserta historias paralelas para mostrar que la realidad tiene múltiples capas. Don Quijote vive en su mundo de caballerías; el cautivo vive en el mundo real de guerra y cautiverio. En código, esto es equivalente a entender que tu aplicación tiene múltiples perspectivas: el usuario, el servidor, la base de datos, la red. Un bug puede ser 'invisible' desde una perspectiva pero obvio desde otra.",
+      "debugging_principle": "Debuggea desde múltiples perspectivas. Un bug que no ves en el frontend puede ser obvio en los logs del servidor. Un bug que no ves en desarrollo puede ser evidente en producción.",
+      "triggers": [
+        "multi_perspective",
+        "layered_debugging",
+        "context_switching"
+      ],
+      "applications": [
+        "Cuando un bug es difícil, debuggea desde diferentes capas (frontend, backend, DB, red)",
+        "Pide a alguien que no conoce el código que lo mire - verá cosas que tú no ves",
+        "Los bugs de producción son bugs de desarrollo que no viste"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "The Return to Sanity",
+      "scene": "Al final, Don Quijote recupera la cordura, renuncia a las novelas de caballerías, y muere. Su 'cura' es admitir que su modelo del mundo estaba mal.",
+      "passage": "renunciar definitivamente a sus novelas de caballería para morir después en paz",
+      "surface_lesson": "Admitir errores sana",
+      "deep_lesson": "El arco de Don Quijote es una metáfora del proceso de aprendizaje: (1) Creer que entiendes el mundo, (2) Descubrir que estás equivocado, (3) Negar la realidad, (4) Eventualmente aceptar la verdad. En programación, esto es el ciclo de debugging: (1) Creer que tu código funciona, (2) Descubrir un bug, (3) Negar que es tu culpa, (4) Admitir y arreglar. La cordura viene de aceptar la realidad, no de negarla.",
+      "debugging_principle": "El debugging no termina cuando arreglas el bug - termina cuando ENTIENDES por qué ocurrió. La 'cura' es la comprensión, no la corrección.",
+      "triggers": [
+        "learning_cycle",
+        "acceptance",
+        "root_cause"
+      ],
+      "applications": [
+        "Después de cada bug, preguntó: '¿Por qué ocurrió esto?' (5 porqués)",
+        "Documenta los bugs que encuentras - son tu libro de caballerías personal",
+        "La 'cordura' en programación es aceptar que siempre hay algo que no sabes"
+      ]
+    }
+  ]
+}
