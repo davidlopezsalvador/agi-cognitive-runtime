@@ -1,0 +1,198 @@
+{
+  "source": "Lazarillo de Tormes",
+  "author": "Anónimo (1554)",
+  "total_heuristics": 10,
+  "methodology": "Deep extraction from specific scenes with debugging applications",
+  "heuristics": [
+    {
+      "id": 1,
+      "name": "The Wrapped Stone Principle",
+      "scene": "El ciego envuelve una piedra en pan y le da a Lázaro. Lázaro cree que es pan, pero al morder la piedra se rompe un diente. El ciego then beats him with the real bread.",
+      "passage": "Que sienta el pan a pedazos en la cabeza. Al fin le vino a llamar Lázaro, y acordóse del pan que el ciego le dio en la cabeza, y no lo llamó mal.",
+      "surface_lesson": "Las apariencias engañan",
+      "deep_lesson": "El ciego CREE que está dando pan, pero la piedra está ENVUELTA en pan. El objeto real (piedra) está oculto bajo una capa de apariencia (pan). En código: un bug puede estar envuelto en código que parece correcto. La función se llama 'validate_input' pero en realidad hace algo completamente diferente. El error no está donde parece estar - está debajo de la superficie.",
+      "debugging_principle": "Cuando algo falla, busca qué hay DEBAJO de lo que parece. El bug no está en la función que falla - está en lo que esa función asume pero no verifica.",
+      "triggers": [
+        "hidden_assumptions",
+        "surface_vs_reality",
+        "misleading_interface"
+      ],
+      "applications": [
+        "Si una función falla, primero verifica qué asume sobre sus inputs antes de buscar el bug en su lógica",
+        "Un bug bien disfrazado es más peligroso que uno obvio - busca la piedra envuelta en pan",
+        "Los bugs más difíciles son los que están bajo código que 'parece correcto'"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "The Blind Man's Radar",
+      "scene": "El ciego, a pesar de ser ciego, detecta cada movimiento de Lázaro. Lázaro cree que puede engañarlo porque no puede ver, pero el ciego lo escucha y lo huele.",
+      "passage": "El ciego le dijo: Juro a Dios que me hueles a melones que me has comido. Y Lázaro, con passo Parameters, le respondió: No me has de ver ahora, sino me has de oír.",
+      "surface_lesson": "No subestimes al adversario",
+      "deep_lesson": "Lázaro cree que ciego = no detecta. Pero el ciego usa SENTIDOS DIFERENTES para detectar. No usa vista - usa oído y olfato. En debugging: los bugs más difíciles no se ven en la inspección visual del código. Un bug de concurrencia no se ve en el código - se ve en los logs de timing. Un bug de memoria no se ve en la sintaxis - se ve en el patrón de allocations.",
+      "debugging_principle": "Si no puedes ver un bug con una herramienta, usa OTRA herramienta. Los bugs de concurrencia se ven con trazas de timing. Los bugs de memoria se ven con profilers. Los bugs de red se ven con packet captures.",
+      "triggers": [
+        "wrong_tool",
+        "invisible_bug",
+        "alternative_perspective"
+      ],
+      "applications": [
+        "Si el debugger no muestra nada, mira los logs. Si los logs no muestran nada, mira los métricos. Si los métricos no muestran nada, mira el patrón de errores.",
+        "Los bugs que no se ven con una herramienta SÍ se ven con otra - solo necesitas cambiar de sentido",
+        "Un ciego puede detectarte mejor que un vidente si usa los sentidos correctos"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "The Survival Gradient",
+      "scene": "Lázaro progresa de maestro en maestro: ciego → clérigo → hidalgo → buldero → alguacil → arcipreste. Cada maestro le enseña algo diferente, pero TODOS lo maltratan.",
+      "passage": "Fue el caso que un día me hurté un measurement de un caldero del ciego, y como lo vió roto, se sospechó que no lo podría yo haber quebrantado, y tuvose por cierto que lo hice de purposely.",
+      "surface_lesson": "Aprende de cada experiencia",
+      "deep_lesson": "Lázaro no aprende de UN maestro - aprende de la DIFERENCIA entre maestros. El ciego le enseña supervivencia física. El clérigo le enseña hipocresía religiosa. El hidalgo le enseña orgullo vacío. Cada maestro es unafuente de conocimiento, pero ninguno es completo. En debugging: no confíes en UN solo diagnóstico. Compara múltiples fuentes. Un error de compilación puede tener 3 posibles causas - necesitas descartar cada una.",
+      "debugging_principle": "No confíes en un solo diagnóstico. Compara múltiples fuentes de información antes de decidir cuál es la causa raíz.",
+      "triggers": [
+        "single_source_bias",
+        "diagnostic_comparison",
+        "progressive_learning"
+      ],
+      "applications": [
+        "Cuando un test falla, NO confíes solo en el mensaje de error - verifica el estado real del sistema",
+        "Los mejores debuggers son los que pueden mantener múltiples hipótesis simultáneamente",
+        "Cada vez que debuggeas algo nuevo, documenta lo que aprendiste - es tu siguiente maestro"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "The Sausage Trap",
+      "scene": "La mujer del clérigo esconde una salchicha. Lázaro la encuentra, la come, y la culpa cae sobre él. Pero la salchicha estaba guardada EN UNA CAJA - Lázaro no la buscó donde debía.",
+      "passage": "Yo le dije que la salchicha no la había yo comido, sino el diablo, porque yo la vi colgar en la cabecera de la cama del señor.",
+      "surface_lesson": "No asumas culpas ajenas",
+      "deep_lesson": "Lázaro se come la salchicha porque está EN UN LUGAR OBVIO (colgada en la cama). Pero la mujer la esconde EN UNA CAJA, que es un lugar MENOS obvio. El error no está en que Lázaro la comió - está en que la estructura del problema (dónde se esconden las cosas) no es la que él asumía. En debugging: cuando un test falla, el bug puede no estar donde el test dice que falla - puede estar en una capa completamente diferente.",
+      "debugging_principle": "Cuando un error indica un problema en un lugar, verifica que el problema no esté en un lugar DIFERENTE que está causando síntomas en ese lugar.",
+      "triggers": [
+        "symptom_vs_cause",
+        "wrong_location",
+        "red_herring"
+      ],
+      "applications": [
+        "Si un test falla en la capa de presentación, verifica la capa de datos primero",
+        "Los bugs que 'desaparecen' al instrumentarlos suelen estar en un lugar distinto al que los logs indican",
+        "No busques la salchicha donde el error dice que está - busca donde ESTABA guardada"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "The Empty Belly Wisdom",
+      "scene": "Lázaro aprende a robar comida SOLO cuando tiene hambre. Cuando está bien alimentado, no roba. La supervivencia define la ética.",
+      "passage": "Yo le dije que la salchicha no la había yo comido, sino el diablo, porque yo la vi colgar en la cabecera de la cama del señor.",
+      "surface_lesson": "La necesidad crea la oportunidad",
+      "deep_lesson": "Lázaro no es un ladrón por naturaleza - es un ladrón por NECESIDAD. Cuando tiene hambre, roba. Cuando no tiene hambre, no roba. Esto revela algo profundo: el comportamiento está determinado por el CONTEXTO, no por la naturaleza del actor. En debugging: un código que funciona en desarrollo puede fallar en producción porque el CONTEXTO es diferente (más datos, más usuarios, más carga). El bug no está en el código - está en la diferencia de contexto.",
+      "debugging_principle": "Si un código funciona en un entorno pero falla en otro, el bug no está en el código - está en la DIFERENCIA de contexto entre los dos entornos.",
+      "triggers": [
+        "context_dependency",
+        "environment_difference",
+        "conditional_behavior"
+      ],
+      "applications": [
+        "Cuando un test falla en CI pero pasa en local, la diferencia NO es el código - es el entorno",
+        "Los bugs de producción son bugs de desarrollo que no viste porque el contexto era diferente",
+        "No confíes en que algo funciona porque funciona AHORA - el contexto puede cambiar"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "The Grape Deception",
+      "scene": "El ciego le dice a Lázaro que coma uvas. Lázaro las recoge, pero el ciego le dice que las coma SIN VER. Lázaro las come sin ver, pero el ciego está guiándolo hacia donde HAY uvas, no donde él cree que hay uvas.",
+      "passage": "El ciego le dijo: Come, que no hay mejor uva que la que está en tu mano. Y Lázaro, con passo Parameters, las fue comiendo.",
+      "surface_lesson": "Confía en tu guía, pero verifica",
+      "deep_lesson": "El ciego está guiando a Lázaro, pero su guía no es precisa - está guiándolo hacia donde HAY uvas, no donde Lázaro CREE que hay uvas. Lázaro confía en la guía del ciego porque el ciego es más experimentado, pero la guía del ciego tiene un sesgo: el ciego quiere las uvas PARA ÉL, no para Lázaro. En debugging: cuando usas una herramienta de debugging (profiler, linter, static analyzer), la herramienta tiene un sesgo - está optimizada para detectar ciertos tipos de problemas, no todos.",
+      "debugging_principle": "Las herramientas de debugging tienen sesgos. Un profiler te dice qué es lento, no qué es incorrecto. Un linter te dice qué es feo, no qué es erróneo. Usa múltiples herramientas y comprende sus sesgos.",
+      "triggers": [
+        "tool_bias",
+        "guided_by_biased_source",
+        "partial_information"
+      ],
+      "applications": [
+        "Un profiler te dice dónde está el tiempo, no dónde está el bug - son cosas diferentes",
+        "Un linter te dice qué viola reglas, no qué falla - pueden ser cosas diferentes",
+        "No confíes ciegamente en una herramienta - entiende qué mide y qué NO mide"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "The Hidalgo's Pride",
+      "scene": "El hidalgo tiene un arnés viejo y roto. Lázaro lo limpia y repara. El hidalgo SE NIEGA a admitir que el arnés está roto - prefiere mantener la ficción de que es un caballero.",
+      "passage": "No había menester más para hacer una gran mofa de él, sino decir que estaba desarmado, y que se le cayó el arnés.",
+      "surface_lesson": "El orgullo impide ver la realidad",
+      "deep_lesson": "El hidalgo prefiere la ficción de ser un caballero a la realidad de ser pobre. Mantiene un arnés roto como SI fuera un tesoro. En programación: el 'expert identity trap' - creer que tu valor depende de nunca cometer errores. Un desarrollador que se niega a admitir que su código tiene bugs es como el hidalgo que se niega a admitir que su arnés está roto. La deuda técnica es el arnés roto del programador.",
+      "debugging_principle": "No confundas tu identidad con tu código. Un bug no te hace mal programador - te hace humano. Admitir 'no sé' es el primer paso para entender.",
+      "triggers": [
+        "ego_attachment",
+        "denial_of_reality",
+        "identity_trap"
+      ],
+      "applications": [
+        "Si defiendes tu código agresivamente, probablemente tiene un bug que no quieres ver",
+        "La deuda técnica es un arnés roto que mantenemos porque nos da la ilusión de control",
+        "Los mejores debuggers son los que pueden decir 'no entiendo esto' sin vergüenza"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "The Watermelon Heist",
+      "scene": "Lázaro roba una sandía de la bodega del clérigo. La come escondido, pero deja las semillas como evidencia. El clérigo las encuentra y sabe que fue Lázaro.",
+      "passage": "La hallé rabiando, y la comí en un open air, y dejé las semillas en señal de la buena presa que había hecho.",
+      "surface_lesson": "Deja rastros de tus errores",
+      "deep_lesson": "Lázaro come la sandía pero deja SEMILLAS como evidencia. No es que sea un mal ladrón - es que el acto de comer DEJA RASTROS inevitables. En debugging: todo código deja rastros. Los logs, las métricas, los archivos temporales, los archivos de configuración. Un bug no desaparece cuando arreglas el síntoma - deja rastros que pueden revelar la causa raíz si sabes dónde buscar.",
+      "debugging_principle": "Todo código deja rastros. Si no puedes encontrar el bug, busca los rastros que dejó: logs, métricas, archivos temporales, estado del sistema.",
+      "triggers": [
+        "trace_evidence",
+        "forensic_debugging",
+        "residue_analysis"
+      ],
+      "applications": [
+        "Cuando un bug desaparece misteriosamente, busca rastros: ¿qué cambió en el sistema?",
+        "Los logs son las semillas de la sandía - te dicen qué comiste y cuándo",
+        "Si no puedes reproducir un bug, busca los rastros que dejó en el estado del sistema"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "The gourd Water Trick",
+      "scene": "Lázaro descubre que el ciego bebe agua de una calabaza haciendo un agujero. Lázaro aprende el truco, pero cuando lo intenta, bebe demasiado y se emborracha.",
+      "passage": "Yo me holgué de saber el secreto del ciego, y hube de hacer lo que él hacía, y bebí más de la medida.",
+      "surface_lesson": "Aprender un truco no es aprender a usarlo",
+      "deep_lesson": "Lázaro ve al ciego hacer un truco y LO COPIA exactamente. Pero el ciego sabe CUÁNDO parar - Lázaro no. Copiar el truco sin entender los LÍMITES del truco es peligroso. En debugging: copiar un patrón de código de Stack Overflow sin entender los edge cases es como copiar el truco de la calabaza sin saber cuándo parar. El patrón funciona para el caso que viste, pero no para todos los casos.",
+      "debugging_principle": "No copies un fix sin entender sus límites. Un fix que funciona para un caso puede fallar para otros. Entiende los edge cases ANTES de aplicar el fix.",
+      "triggers": [
+        "cargo_cult_copying",
+        "missing_limits",
+        "incomplete_understanding"
+      ],
+      "applications": [
+        "Cuando copias un fix de Stack Overflow, primero entiende QUÉ PROBLEMA resuelve y CUÁNDO falla",
+        "Un fix que funciona para N=10 puede fallar para N=1000000 - entiende los límites",
+        "No bebas de la calabaza sin saber cuándo parar - el truco tiene un límite"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "The Final Confession",
+      "scene": "Al final del libro, Lázaro confiesa todo: sus robos, sus mentiras, sus manipulaciones. Pero lo hace PARA OBTENER ALGO - no por arrepentimiento sino por conveniencia.",
+      "passage": "Señor, yo he dicho la verdad, y si no la hubiera dicho, la pudiera yo probar.",
+      "surface_lesson": "La confesión no es siempre arrepentimiento",
+      "deep_lesson": "Lázaro confiesa sus pecados, pero su confesión tiene un PROPÓSITO: obtener la protección del arcipreste. No es una confesión genuina - es una estrategia. En debugging: cuando alguien dice 'encontré el bug', no asumas que lo entendió. Puede haber encontrado el síntoma sin encontrar la causa. La confesión del bug (reportarlo) no es lo mismo que entender el bug (corregirlo).",
+      "debugging_principle": "Reportar un bug no es lo mismo que entenderlo. No confundas 'encontré el error' con 'sé por qué ocurre'. La comprensión viene después del reporte, no antes.",
+      "triggers": [
+        "report_vs_understanding",
+        "symptom_reporting",
+        "false_resolution"
+      ],
+      "applications": [
+        "Cuando reportas un bug, preguntó: '¿por qué ocurre?' no solo '¿dónde ocurre?'",
+        "Un bug report sin causa raíz es una confesión sin arrepentimiento - no resuelve nada",
+        "La solución no es encontrar el bug - es entender por qué el código permite que ocurra"
+      ]
+    }
+  ]
+}
